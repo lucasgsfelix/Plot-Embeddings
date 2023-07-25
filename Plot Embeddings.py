@@ -48,7 +48,7 @@ df = pd.concat([df_yelp, df])
 
 df['text'] = hero.clean(df['text'])
 
-df = df[['text', 'trip type']]
+df = df[['text', 'trip type', 'dataset']]
 
 df = df.dropna(subset=['text'])
 
