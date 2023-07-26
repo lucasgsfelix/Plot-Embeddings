@@ -70,7 +70,7 @@ legend = {0: 'Leisure', 1: 'Work'}
 # Plotando os embeddings
 plt.figure(figsize=(20, 20))
 
-sne = TSNE(n_components=2, random_state=42, perplexity=30, metric='cosine')
+tsne = TSNE(n_components=2, random_state=42, perplexity=30, metric='cosine')
 
 for dataset in tqdm.tqdm(df['dataset'].unique())
 
