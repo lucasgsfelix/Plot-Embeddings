@@ -82,7 +82,7 @@ for dataset in tqdm.tqdm(df['dataset'].unique())
         categoy_words = ' '.join(category_df['text'].tolist()).split(' ')
 
         # Recupere os embeddings para as palavras escolhidas
-        embeddings = np.array([model[word] for word in categoy_words if word in model.wv.vocab])
+        embeddings = np.array([model[word] for word in np.unique(categoy_words) if word in model.wv.vocab])
 
         embeddings_2d = tsne.fit_transform(embeddings)
 
