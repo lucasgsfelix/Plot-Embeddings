@@ -77,16 +77,19 @@ for dataset in tqdm.tqdm(df['dataset'].unique())
     for trip_type in df['trip type'].unique():
 
 
-        category_df = df[(df['trip type'] == trip_type) & (df['dataset'] == dataset)].sample(100)
+        category_df = df[(df['trip type'] == trip_type) & (df['dataset'] == dataset)]
 
-        categoy_words = ' '.join(category_df['text'].tolist()).split(' ')
+        category_words = ' '.join(category_df['text'].tolist()).split(' ')
+
+        category_words = list(filter(lambda x: x in model.wv.vocab, np.unique(category_words)))
+        
 
         # Recupere os embeddings para as palavras escolhidas
-        embeddings = np.array([model[word] for word in np.unique(categoy_words) if word in model.wv.vocab])
+        embeddings = np.array([model[word] for word in category_words])
 
         embeddings_2d = tsne.fit_transform(embeddings)
 
-        for i, palavra in enumerate(categoy_words):
+        for i, palavra in enumerate(category_words):
 
 
             plt.scatter(embeddings_2d[i, 0], embeddings_2d[i, 1], marker='o',
