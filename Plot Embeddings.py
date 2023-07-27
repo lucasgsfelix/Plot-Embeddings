@@ -89,12 +89,8 @@ for dataset in tqdm.tqdm(df['dataset'].unique())
 
         embeddings_2d = tsne.fit_transform(embeddings)
 
-        for i, palavra in enumerate(category_words):
+        plt.scatter(embeddings_2d[:, 0], embeddings_2d[:, 1], marker='o', label=dataset + ' ' + legend[trip_type])
 
-
-            plt.scatter(embeddings_2d[i, 0], embeddings_2d[i, 1], marker='o',
-                        label=dataset + ' ' + legend[trip_type])
-            #plt.text(embeddings[i, 0] + 0.01, embeddings[i, 1] + 0.01, palavra, fontsize=9)
 
 plt.xlabel('Dimensão 1')
 plt.ylabel('Dimensão 2')
