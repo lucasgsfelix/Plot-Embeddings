@@ -87,10 +87,9 @@ for dataset in tqdm.tqdm(df['dataset'].unique())
         # Recupere os embeddings para as palavras escolhidas
         embeddings = np.array([model[word] for word in category_words])
 
+        document_embeddings = np.mean(np.array(embeddings), axis=0)
+        
         complete_embeddings.append(document_embeddings)
-
-
-    complete_embeddings = np.mean(np.array(complete_embeddings), axis=0)
 
     embeddings_2d = tsne.fit_transform(complete_embeddings)
 
