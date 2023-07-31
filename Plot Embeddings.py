@@ -91,7 +91,7 @@ for dataset in tqdm.tqdm(df['dataset'].unique())
         
         complete_embeddings.append(document_embeddings)
 
-    embeddings_2d = tsne.fit_transform(complete_embeddings)
+    embeddings_2d = tsne.fit_transform(np.array(complete_embeddings))
 
     if dataset == 'Yelp':
 
