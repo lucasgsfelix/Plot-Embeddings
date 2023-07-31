@@ -95,11 +95,11 @@ for dataset in tqdm.tqdm(df['dataset'].unique())
 
     if dataset == 'Yelp':
 
-        colors = ['orange' if purpose == 0 else 'blue' for purpose in df['trip class']]
+        colors = ['orange' if purpose == 0 else 'blue' for purpose in category_df['trip class']]
 
     else:
 
-        colors = ['red' if purpose == 0 else 'purple' for purpose in df['trip class']]
+        colors = ['red' if purpose == 0 else 'purple' for purpose in category_df['trip class']]
     
     plt.scatter(embeddings_2d[:, 0], embeddings_2d[:, 1], marker='o', label=dataset, color=colors)
 
