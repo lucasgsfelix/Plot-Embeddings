@@ -55,7 +55,7 @@ df['text'] = df['text'].str.lower()
 sentencas = df[df['dataset'] == 'TripAdvisor']['text'].str.split(' ').values.tolist()
 
 # Treinamento do modelo Word2Vec
-trip_advisor_model = Word2Vec(sentencas, window=5, min_count=1, vector_size=300, workers=10)
+trip_advisor_model = Word2Vec(sentencas, window=5, min_count=1, size=300, workers=10)
 
 
 # In[11]:
