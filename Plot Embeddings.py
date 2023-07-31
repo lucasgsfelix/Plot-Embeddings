@@ -39,8 +39,6 @@ df['dataset'] = 'TripAdvisor'
 df_yelp['dataset'] = 'Yelp'
 
 df = pd.concat([df_yelp, df])
-
-
 # In[ ]:
 
 
@@ -54,10 +52,10 @@ df = df.dropna(subset=['text'])
 
 df['text'] = df['text'].str.lower()
 
-sentencas = df['text'].str.split(' ').values.tolist()
+sentencas = df[df['dataset'] == 'TripAdvisor']['text'].str.split(' ').values.tolist()
 
 # Treinamento do modelo Word2Vec
-trip_advisor_model = Word2Vec(sentencas, window=5, min_count=1, workers=10)
+trip_advisor_model = Word2Vec(sentencas, window=5, min_count=1, vector_size=300, workers=10)
 
 
 # In[11]:
@@ -70,26 +68,41 @@ legend = {0: 'Leisure', 1: 'Work'}
 # Plotando os embeddings
 plt.figure(figsize=(20, 20))
 
-tsne = TSNE(n_components=2, random_state=42, perplexity=30, metric='cosine')
+tsne = TSNE(n_components=2, random_state=42, perplexity=30, metric='cosine', n_jobs=-1)
 
 for dataset in tqdm.tqdm(df['dataset'].unique())
 
-    for trip_type in df['trip type'].unique():
+    category_df = df[(df['dataset'] == dataset)]
 
+    documents = category_df['text'].values
 
-        category_df = df[(df['trip type'] == trip_type) & (df['dataset'] == dataset)]
+    complete_embeddings = []
 
-        category_words = ' '.join(category_df['text'].tolist()).split(' ')
+    for document in tqdm.tqdm(documents):
 
-        category_words = list(filter(lambda x: x in model.wv.vocab, np.unique(category_words)))
-        
-
+        category_words = document.split(' ')
+    
+        category_words = list(filter(lambda x: x in model.wv.vocab, category_words))
+    
         # Recupere os embeddings para as palavras escolhidas
         embeddings = np.array([model[word] for word in category_words])
 
-        embeddings_2d = tsne.fit_transform(embeddings)
+        complete_embeddings.append(document_embeddings)
 
-        plt.scatter(embeddings_2d[:, 0], embeddings_2d[:, 1], marker='o', label=dataset + ' ' + legend[trip_type])
+
+    complete_embeddings = np.mean(np.array(complete_embeddings), axis=0)
+
+    embeddings_2d = tsne.fit_transform(complete_embeddings)
+
+    if dataset == 'Yelp':
+
+        colors = ['orange' if purpose == 0 else 'blue' for purpose in df['trip class']]
+
+    else:
+
+        colors = ['red' if purpose == 0 else 'purple' for purpose in df['trip class']]
+    
+    plt.scatter(embeddings_2d[:, 0], embeddings_2d[:, 1], marker='o', label=dataset, color=colors)
 
 
 plt.xlabel('Dimensão 1')
